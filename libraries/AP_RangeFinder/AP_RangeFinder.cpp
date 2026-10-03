@@ -66,6 +66,7 @@
 #include "AP_RangeFinder_LightWare_GRF.h"
 #include "AP_RangeFinder_LightWare_GRF_I2C.h"
 #include "AP_RangeFinder_DTS6012M.h"
+#include "AP_RangeFinder_Jiyi_CAN.h"
 
 #include <AP_BoardConfig/AP_BoardConfig.h>
 #include <AP_Logger/AP_Logger.h>
@@ -645,6 +646,12 @@ __INITFUNC__ void RangeFinder::detect_instance(uint8_t instance, uint8_t& serial
         break;
 #endif // AP_RANGEFINDER_DTS6012M_ENABLED
 
+#if AP_RANGEFINDER_JIYI_CAN_ENABLED
+    case Type::Jiyi_CAN:
+        _add_backend(NEW_NOTHROW AP_RangeFinder_Jiyi_CAN(state[instance], params[instance]), instance);
+        break;
+#endif
+
     case Type::NONE:
         break;
     }
@@ -959,6 +966,31 @@ bool RangeFinder::prearm_healthy(char *failure_msg, const uint8_t failure_msg_le
             break;
         }
 #endif // AP_RANGEFINDER_NRA24_CAN_DRIVER_ENABLED 
+
+#if AP_RANGEFINDER_JIYI_CAN_ENABLED
+        case Type::Jiyi_CAN: {
+            if (drivers[i] == nullptr) {
+                return false;
+            }
+            auto *backend = static_cast<AP_RangeFinder_Jiyi_CAN*>(drivers[i]);
+            if (backend->get_receive_id() <= 0) {
+                hal.util->snprintf(failure_msg, failure_msg_len, "Rangefinder %u: RECV_ID is 0", unsigned(i + 1));
+                return false;
+            }
+            bool found = false;
+            for (uint8_t j = 0; j < JiyiRadar::NUM_STREAM_CONFIGS; j++) {
+                if (JiyiRadar::STREAM_CONFIGS[j].recv_id == backend->get_receive_id()) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                hal.util->snprintf(failure_msg, failure_msg_len, "Rangefinder %u: RECV_ID %d unsupported", unsigned(i + 1), int(backend->get_receive_id()));
+                return false;
+            }
+            break;
+        }
+#endif
 
         default:
             break;

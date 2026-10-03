@@ -15,6 +15,7 @@
 #include <netinet/udp.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <AP_Math/crc.h>
 
 #define MCAST_ADDRESS_BASE "239.65.82.0"
@@ -40,7 +41,10 @@ bool CAN_Multicast::init(uint8_t instance)
     char address[] = MCAST_ADDRESS_BASE;
 
     address[strlen(address)-1] = '0' + instance;
-    return sock.connect(address, MCAST_PORT);
+    bool ok = sock.connect(address, MCAST_PORT);
+    ::printf("[MCAST_INIT] Multicast transport initialized for instance %d on %s:%u (ok=%d)\n",
+             instance, address, MCAST_PORT, ok);
+    return ok;
 }
 
 /*
