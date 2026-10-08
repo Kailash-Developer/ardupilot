@@ -21,7 +21,7 @@ public:
         PiccoloCAN = 4,
         // 5 was CANTester
         EFI_NWPMU = 6,
-        USD1 = 7,
+        USD1 = 15,
         KDECAN = 8,
         // 9 was MPPT_PacketDigital
         Scripting = 10,
@@ -29,6 +29,6 @@ public:
         Scripting2 = 12,
         TOFSenseP = 13,
         RadarCAN = 14,  // used by NanoRadar and Hexsoon
-        Jiyi = 15,
+        Jiyi = 7,
     };
 };

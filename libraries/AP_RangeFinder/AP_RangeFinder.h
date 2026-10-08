@@ -162,7 +162,7 @@ public:
         Lua_Scripting = 36,
 #endif
 #if AP_RANGEFINDER_NOOPLOOP_ENABLED
-        NoopLoop_P = 37,
+        NoopLoop_P = 49,
 #endif
 #if AP_RANGEFINDER_TOFSENSEP_CAN_ENABLED
         TOFSenseP_CAN = 38,
@@ -198,7 +198,7 @@ public:
         LightWare_GRF_I2C = 48,
 #endif // AP_RANGEFINDER_LIGHTWARE_GRF_I2C_ENABLED
 #if AP_RANGEFINDER_JIYI_CAN_ENABLED
-        Jiyi_CAN = 49,
+        Jiyi_CAN = 37,
 #endif
 #if AP_RANGEFINDER_SIM_ENABLED
         SIM = 100,

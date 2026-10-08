@@ -974,7 +974,7 @@ bool RangeFinder::prearm_healthy(char *failure_msg, const uint8_t failure_msg_le
             }
             auto *backend = static_cast<AP_RangeFinder_Jiyi_CAN*>(drivers[i]);
             if (backend->get_receive_id() <= 0) {
-                hal.util->snprintf(failure_msg, failure_msg_len, "Rangefinder %u: RECV_ID is 0", unsigned(i + 1));
+                hal.util->snprintf(failure_msg, failure_msg_len, "Rangefinder %u: MSG_ID is 0", unsigned(i + 1));
                 return false;
             }
             bool found = false;
@@ -985,7 +985,7 @@ bool RangeFinder::prearm_healthy(char *failure_msg, const uint8_t failure_msg_le
                 }
             }
             if (!found) {
-                hal.util->snprintf(failure_msg, failure_msg_len, "Rangefinder %u: RECV_ID %d unsupported", unsigned(i + 1), int(backend->get_receive_id()));
+                hal.util->snprintf(failure_msg, failure_msg_len, "Rangefinder %u: MSG_ID %d unsupported", unsigned(i + 1), int(backend->get_receive_id()));
                 return false;
             }
             break;
